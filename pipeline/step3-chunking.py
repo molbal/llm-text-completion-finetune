@@ -58,8 +58,6 @@ def main():
             output_data = [{'chunk': chunk, 'source': source} for chunk in chunks]
             df_list.append(pd.DataFrame(output_data))
 
-
-
             print(f"Appended chunks: {str(len(chunks))} to output data")
 
     # Write all chunks to parquet
@@ -67,6 +65,7 @@ def main():
     output_df = pd.concat(df_list, ignore_index=True)
     output_df.to_parquet(args.output_file, engine='pyarrow')
     print(f"✅ Done.")
+
 
 if __name__ == "__main__":
     main()
