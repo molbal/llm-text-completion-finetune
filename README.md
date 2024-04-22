@@ -53,6 +53,19 @@ Then once you have the necessary libraries installed, execute the script:
 
 ## Step 4: Hugging Face dataset upload
 
+Once we have the data.parquet file, we can upload it to Hugging Face ( https://huggingface.co/new-dataset ). I name it molbal/horror-novel-chunks as it is the topic I used for this example. Since this dataset is based on public domain works, I select the _unlicense_ license. I set public visibility, as I would like to share this with the community.
+
+
+Once we created the dataset, we are greeted by an empty skeleton. I first edit the dataset card to list the novels I parsed.
+
+![Empty dataset](images/step3-empty-dataset.png)
+
+I will directly edit the readme markdown on the Hugging Face editor, but you can check the dataset and commit it with git if you prefer that. It suggests me to import a dataset card template, but it is way too detailed for our plain and simple use case now. For good measure, I listed the source files and linked the GitHub repository with the example scripts. (https://github.com/molbal/llm-text-completion-finetune)
+
+I upload the data.parquet file as it is, commit it directly to the main branch, because brancing is unnecessary here, and here is the result: 
+https://huggingface.co/datasets/molbal/horror-novel-chunks
+
+
 ## Step 5: Setting up training environment
 
 ## Step 6: Executing the training itself & Quantizing the model
