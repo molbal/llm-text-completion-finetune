@@ -100,6 +100,7 @@ def main():
             data = response.json()
 
 
+    print(f"✅ Done.")
 
 if __name__ == '__main__':
     main()

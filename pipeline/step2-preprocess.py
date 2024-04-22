@@ -1,7 +1,5 @@
 import os
-import sys
 import argparse
-import re
 
 
 def process_file(input_file, output_dir):
@@ -52,6 +50,8 @@ def main():
     # Iterate through all text files in the input directory
     for filename in os.listdir(args.input_dir):
         process_file(os.path.join(args.input_dir, filename), args.output_dir)
+
+    print(f"✅ Done.")
 
 
 if __name__ == '__main__': main()
