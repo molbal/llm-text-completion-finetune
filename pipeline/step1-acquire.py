@@ -4,6 +4,7 @@ import time
 import requests
 import re
 
+
 def clean_filename(input_string):
     allowed_chars = r'[a-zA-Z .-]'
     output_string = re.sub(r'[^' + allowed_chars + ']', '', input_string)
@@ -11,7 +12,6 @@ def clean_filename(input_string):
 
 
 def download_book(book_url, output_dir, filename):
-
     # Clean filename
     filename = clean_filename(filename)
 
@@ -71,7 +71,7 @@ def main():
         if already_downloaded == 0:
             print(f"Got {data['count']} results, getting the most popular {args.num_records} books.")
 
-        for book in data['results'][:args.num_records-already_downloaded]:
+        for book in data['results'][:args.num_records - already_downloaded]:
             try:
                 book_url = book['formats']['text/plain; charset=us-ascii']
 
@@ -87,7 +87,6 @@ def main():
             except Exception as e:
                 print(f"Skipping book {book['title']} due to an unexpected error.")
 
-
         if already_downloaded >= args.num_records:
             print(f"Downloaded {already_downloaded} books.")
             break
@@ -99,8 +98,8 @@ def main():
             response.raise_for_status()
             data = response.json()
 
-
     print(f"✅ Done.")
+
 
 if __name__ == '__main__':
     main()

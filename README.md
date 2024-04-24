@@ -1,13 +1,37 @@
 # LLM finetuning (text complation)
 This repository guides through the process of fine-tuning a text completion (not instruct) dense base LLM (like Llama 2/3 or Mistral) from content.
 
+
+<!-- TOC -->
+* [LLM finetuning (text complation)](#llm-finetuning-text-complation)
+  * [Forethought](#forethought)
+  * [Requirements](#requirements)
+  * [Step 1: Acquiring training data](#step-1-acquiring-training-data)
+  * [Step 2: Preprocessing the training data](#step-2-preprocessing-the-training-data)
+  * [Step 3: Chunking](#step-3-chunking)
+  * [Step 4: Hugging Face dataset upload](#step-4-hugging-face-dataset-upload)
+  * [Step 5: Setting up training environment](#step-5-setting-up-training-environment)
+    * [Lazy method](#lazy-method)
+    * [Alternative environments to train on](#alternative-environments-to-train-on)
+  * [Step 6: Training and adapter](#step-6-training-and-adapter)
+    * [In-depth look of what the training script does:](#in-depth-look-of-what-the-training-script-does)
+  * [Step 7: Conversion and Quantization](#step-7-conversion-and-quantization)
+    * [What is quantization?](#what-is-quantization-)
+  * [Step 8: Local verification](#step-8-local-verification)
+  * [Step 8: Publishing your model](#step-8-publishing-your-model)
+    * [On Hugging Face](#on-hugging-face)
+    * [On the Ollama registry](#on-the-ollama-registry-)
+<!-- TOC -->
+
+ ![flow.png](images/flow.png)
+
 ## Forethought
 This is a thought experiment and only for practice/educational purpose. The code in this repository in its current form is not production-ready.
 
 ## Requirements
 - **Hugging Face account**: We will upload the training dataset to Hugging Face, because the `SFTTrainer` can very easily load datasets from there.
 - **A workstation for data preparation and model verification**: This can be any computer with Python installed, preferably its something local as for best results we'll need to do a bit of data cleaning manually. (I used a Windows 11 laptop with Python 3.10).
-- **5 euros or incredible patience**: For renting a GPU powered container instance for training - I will list alternatives later in the section, even free ones - or a workstation with a modern Nvidia GPU with at least 16GB of VRAM. _Currently_ the training library do not support AMD/Intel GPUs. (See: https://github.com/unslothai/unsloth/issues/37)
+- **~5 euros or incredible patience**: For renting a GPU powered container instance for training - I will list alternatives later in the section, even free ones - or a workstation with a modern Nvidia GPU with at least 16GB of VRAM. _Currently_ the training library do not support AMD/Intel GPUs. (See: https://github.com/unslothai/unsloth/issues/37)
 
 
 ## Step 1: Acquiring training data
@@ -17,7 +41,7 @@ Project Gutenberg is a digital library that provides free access to 70k+ e-books
 
 I will use the Gutendex API (https://gutendex.com/) to query The Gutenberg projects for horror topic books:
 
-`python .\pipeline\step0-acquire.py --output_dir "./training-data/0_raw/" --topic horror --num_records 200`
+`python .\pipeline\step0-acquire.py --output_dir "./training-data/0_raw/" --topic horror --num_records 2000`
 
 This will download a bunch of text files to the library that we can work with. 
 
@@ -106,9 +130,17 @@ This installs the following dependencies:
 - `accelerate`: A library for accelerating machine learning tasks in Python, focusing on optimizing performance and memory usage.
 - `bitsandbytes`: A low-level library providing utilities for working with binary data in Python, including bitwise operations and byte manipulation.
 
+### Alternative environments to train on
+There are other options than vast.ai to consider:
+
+ - Google Colaboratory: Notebooks with GPU acceleration. Some free GPUs might work, but if you leave the computer idle (which _might happen_ since the training takes multiple hours at minimum)
+ - Kaggle: Same notebooks with GPU acceleration.
+ - Training locally, if you can do that
+
+Anything works that has the required amount of raw power, and has these dependencies installed.
 
 
-## Step 6: Executing the fine-tuning
+## Step 6: Training and adapter
 **You will reach the following milestone after this step: A LoRA adapter**
 
 Then upload the training file `pipeline/step6-train.py` to the container filesystem's root (Just drag and drop on the filesystem) and you finally can begin training:
@@ -143,12 +175,6 @@ After you have everything safe and sound on your disk, you can terminate the GPU
 4. It creates a LoRA, which is an adapter on the full model, modifying model weights (usually affects 1 to 10 percent of the model), but it does not retrain the entire base model
 5. It then merges the adapter into the original model, and quantizes it (lossy compresses it), with the Q4_K_M format, which is very efficient yet the model stays usable. (Read more about quantization here: https://mlabonne.github.io/blog/posts/Quantize_Llama_2_models_using_ggml.html)
 
-### Alternative environments to train on
-There are other options, than vast.ai to consider:
-
- - Google Colaboratory: Notebooks with GPU acceleration. Some free GPUs might work, but if you leave the computer idle (which _might happen_ since the training takes multiple hours at minimum)
- - Kaggle: Same notebooks with GPU acceleration.
- - Training locally, if you can do that
 
 ## Step 7: Conversion and Quantization
 **You will reach the following milestone after this step: The text completion model is converted into a quantized format.**
@@ -185,7 +211,7 @@ limited memory, e.g. 8B parameter quantized models easily run on modern consumer
 improve inference times and reduce power consumption.
 
 
-## Step 8: Trying out locally
+## Step 8: Local verification
 **You will reach the following milestone after this step: The text completion runs locally on your workstation**
 [config.json](..%2F..%2FDesktop%2Fhorror-llama3-8b-v1.0%2Fconfig.json)
 We will use the tool **Ollama** (https://ollama.com/) to run this on our local workstation.
