@@ -61,7 +61,7 @@ def main():
             gradient_accumulation_steps=4,
             warmup_ratio=0.05,
             max_grad_norm=1.0,
-            num_train_epochs=5,
+            num_train_epochs=1,
             learning_rate=2e-5,
             fp16=not torch.cuda.is_bf16_supported(),
             bf16=torch.cuda.is_bf16_supported(),
@@ -94,8 +94,13 @@ def main():
     print(f"Peak reserved memory % of max memory = {used_percentage} %.")
     print(f"Peak reserved memory for training % of max memory = {lora_percentage} %.")
 
-    model.save_pretrained_gguf("/output/gguf-quant/", tokenizer, quantization_method="q4_k_m")
+    try:
+        model.save_pretrained_gguf("/output/gguf-quant/", tokenizer, quantization_method="q4_k_m")
+    except Exception as e:
+        print(f"Error: {e}")
+
     print(f"✅ Done.")
+
 
 if __name__ == "__main__":
     main()

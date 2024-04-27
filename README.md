@@ -114,6 +114,8 @@ This time I chose an RTX 3090 instance and set it to connect with Jupyter.
 Once connected, I open a terminal window and run the following commands:
 
 ```bash
+wget https://raw.githubusercontent.com/molbal/llm-text-completion-finetune/main/pipeline/step6-train.py
+wget https://raw.githubusercontent.com/molbal/llm-text-completion-finetune/main/pipeline/step7-convert-and-quant.py
 pip install "unsloth[colab-new] @ git+https://github.com/unslothai/unsloth.git"
 pip install --no-deps packaging ninja einops flash-attn xformers trl peft accelerate bitsandbytes
 ```
@@ -143,7 +145,7 @@ Anything works that has the required amount of raw power, and has these dependen
 ## Step 6: Training and adapter
 **You will reach the following milestone after this step: A LoRA adapter**
 
-Then upload the training file `pipeline/step6-train.py` to the container filesystem's root (Just drag and drop on the filesystem) and you finally can begin training:
+Run the training file `pipeline/step6-train.py` and you finally can begin training:
 
 `python /step6-train.py --dataset molbal/horror-novel-chunks`
 
@@ -155,11 +157,11 @@ In the dataset parameter, specify the dataset's Hugging Face identifier, for me 
 
 By default, the script takes llama3 8b as its base model. If you selected a GPU with 16GB VRAM, then you will be fine with the following models:
 
-| Base model name | Model ID                      |
-|-----------------|-------------------------------|
-| Llama-3 8b      | `unsloth/llama-3-8b-bnb-4bit` |
-| Mistral 7b      | `unsloth/mistral-7b-bnb-4bit` |
-| Gemma 7b        | `unsloth/gemma-7b-bnb-4bit`   |
+| Base model name | Model ID                           |
+|-----------------|------------------------------------|
+| Llama-3 8b      | `unsloth/llama-3-8b-bnb-4bit`      |
+| Mistral 7b      | `unsloth/mistral-7b-v0.2-bnb-4bit` |
+| Gemma 7b        | `unsloth/gemma-7b-bnb-4bit`        |
 
 E.g.: I for using the Mistral base model, I would run `python /step6-train.py --dataset molbal/horror-novel-chunks --base_model unsloth/mistral-7b-bnb-4bit`
 
