@@ -65,7 +65,7 @@ To run this snippet, you will need some dependencies:
 
 `pip install pyarrow pandas nltk`
 
-Installed depepndencies
+Installed dependencies
 
 - `pyarrow`: A library for working with the Apache Arrow data format, which is used for writing the Parquet file in this script.
 - `pandas`: A popular data analysis and manipulation library for Python, which is used to create a DataFrame from the processed data.
