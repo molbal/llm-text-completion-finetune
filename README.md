@@ -31,7 +31,7 @@ This is a thought experiment and only for practice/educational purpose. The code
 ## Requirements
 - **Hugging Face account**: We will upload the training dataset to Hugging Face, because the `SFTTrainer` can very easily load datasets from there.
 - **A workstation for data preparation and model verification**: This can be any computer with Python installed, preferably its something local as for best results we'll need to do a bit of data cleaning manually. (I used a Windows 11 laptop with Python 3.10).
-- **~5 euros or incredible patience**: For renting a GPU powered container instance for training - I will list alternatives later in the section, even free ones - or a workstation with a modern Nvidia GPU with at least 16GB of VRAM. _Currently_ the training library do not support AMD/Intel GPUs. (See: https://github.com/unslothai/unsloth/issues/37)
+- **~5 euros or incredible patience**: For renting a GPU powered container instance for training - I will list alternatives later in the section, even free ones - or a workstation with a modern Nvidia GPU with at least 16GB of VRAM. _Currently_ the training library does not support AMD/Intel GPUs. (See: https://github.com/unslothai/unsloth/issues/37)
 
 
 ## Step 1: Acquiring training data
